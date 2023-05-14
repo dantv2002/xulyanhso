@@ -11,13 +11,13 @@ import csv
 # Define the class names
 class_names = []
 # class_names = ['Black Rot', 'ESCA', 'Healthy', 'Leaf Blight', ...]
-with open('names.csv', newline='') as f:
+with open('./resource/names.csv', newline='') as f:
     reader = csv.DictReader(f)
     for row in reader:
         class_names.append(row['name'])
 
 modelNames = []
-with open('modelNames.csv', newline='') as f:
+with open('./resource/modelNames.csv', newline='') as f:
     reader = csv.DictReader(f)
     for row in reader:
         modelNames.append(row['name'])
@@ -26,7 +26,7 @@ with open('modelNames.csv', newline='') as f:
 file_path = None
 origin_image = None
 # Load the saved model
-model = tf.keras.models.load_model('./models/my_trained_model5.h5')
+model = tf.keras.models.load_model('./pretrain_models/my_trained_model5.h5')
 img_height = img_width = 256
 
 # Create a function to preprocess the image
@@ -101,19 +101,19 @@ def reloadModel():
     print("Selected option:", new_option)
     if new_option == "ResNet 50 with dropout":
         model = None
-        model = tf.keras.models.load_model('./models/my_trained_model5.h5')
+        model = tf.keras.models.load_model('./pretrain_models/my_trained_model5.h5')
     elif new_option == "ResNet 50":
         model = None
-        model = tf.keras.models.load_model('./models/my_trained_model3.h5')
+        model = tf.keras.models.load_model('./pretrain_models/my_trained_model3.h5')
     elif new_option == "Basic CNN":
         model = None
-        model = tf.keras.models.load_model('./models/my_trained_model.h5')
+        model = tf.keras.models.load_model('./pretrain_models/my_trained_model.h5')
     elif new_option == "ResNet 50 - imagenet":
         model = None
-        model = tf.keras.models.load_model('./models/grape_disease_model.h5')
+        model = tf.keras.models.load_model('./pretrain_models/grape_disease_model.h5')
     else:
         model = None
-        model = tf.keras.models.load_model('./models/my_trained_model2.h5')
+        model = tf.keras.models.load_model('./pretrain_models/my_trained_model2.h5')
     messagebox.showinfo("Changed model", "Selected model is {0}.".format(new_option))
         
 
@@ -132,7 +132,7 @@ window.geometry(f"{window_width}x{window_height}+{x}+{y}")
 canvasBanner = tk.Canvas(window, width=900, height=180)
 canvasBanner.place(x=0, y = 0)
 canvas_imageBanner = canvasBanner.create_image(0, 0, anchor=tk.NW)
-imageBanner = Image.open("./banner.png")
+imageBanner = Image.open("./resource/banner.png")
 imageBanner = imageBanner.resize((900, 180))
 image_tk = ImageTk.PhotoImage(imageBanner)
 canvasBanner.itemconfig(canvas_imageBanner, image=image_tk)

@@ -12,6 +12,8 @@ from tensorflow.keras.callbacks import ModelCheckpoint, EarlyStopping
 from tensorflow.keras.optimizers import Adam
 from sklearn.metrics import classification_report, confusion_matrix, accuracy_score, recall_score, precision_score, f1_score
 plt.rcParams['figure.figsize']= (20,8)
+train_dir = 'E:\\Document\\HK2-2022-2023\\DIPR\\Project\\research\\GrapeDiseaseDataset\\OriginalData\\train'
+test_dir = 'E:\\Document\\HK2-2022-2023\\DIPR\\Project\\research\\GrapeDiseaseDataset\\OriginalData\\test'
 
 batch_size = 32
 img_size = 256
@@ -24,21 +26,21 @@ datagen = ImageDataGenerator(rescale=1/255.,
                              shear_range=0.2,
                             brightness_range = [0.6,1.2])
 
-train_generator = datagen.flow_from_directory("/content/drive/MyDrive/grape_dataset/train",
+train_generator = datagen.flow_from_directory(train_dir,
                                               target_size= (img_size, img_size),
                                               batch_size = batch_size,
                                               subset = 'training',
                                               shuffle = True,
                                               class_mode ='categorical')
 
-val_generator = datagen.flow_from_directory("/content/drive/MyDrive/grape_dataset/train",
+val_generator = datagen.flow_from_directory(train_dir,
                                               target_size= (img_size, img_size),
                                               batch_size = batch_size,
                                               subset = 'validation',
                                               shuffle = False,
                                               class_mode ='categorical')
 
-test_generator = datagen.flow_from_directory("/content/drive/MyDrive/grape_dataset/test",
+test_generator = datagen.flow_from_directory(test_dir,
                                             target_size= (img_size, img_size),
                                             batch_size = batch_size,
                                             shuffle = False,

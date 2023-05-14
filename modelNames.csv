@@ -1,0 +1,6 @@
+index,name
+0,ResNet 50 with dropout
+1,ResNet 50
+2,Basic CNN
+3,Basic CNN with dropout
+4,ResNet 50 - imagenet

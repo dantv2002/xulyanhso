@@ -64,7 +64,12 @@ def classify_image():
     # class_prob = np.max(predictions[0])
     # Show a message box with the predicted class and percentage
     canvasInfor.delete('all')
-    text = canvasInfor.create_text(90, 80, anchor=tk.CENTER, text = "Predict information \n Black Rot: {0}% \n ESCA: {1}% \n Healthy: {2}% \n Leaf Blight: {3}%".format(round( predictions[0][0]*100, 2),round( predictions[0][1]*100, 2),round( predictions[0][2]*100, 2),round( predictions[0][3]*100, 2)), font=("Arial", 14))
+    text = canvasInfor.create_text(90, 50, anchor=tk.CENTER, text = "Predict information \n", font=("Arial", 14))
+    index = 0
+    for name in class_names:
+        text = canvasInfor.create_text(10, 90 + index * 25, anchor=tk.W, text = "{0}: {1}% \n ".format( name, round( predictions[0][index]*100, 2)), font=("Arial", 14))
+        index+=1
+    # text = canvasInfor.create_text(90, 100, anchor=tk.CENTER, text = "\n Black Rot: {0}% \n ESCA: {1}% \n Healthy: {2}% \n Leaf Blight: {3}%".format(round( predictions[0][0]*100, 2),round( predictions[0][1]*100, 2),round( predictions[0][2]*100, 2),round( predictions[0][3]*100, 2)), font=("Arial", 14))
     # messagebox.showinfo('Classification Result', f'The image is classified as {class_name} with {class_prob} probability.')
 
 # Create a function to handle the upload button click
@@ -87,10 +92,41 @@ def handle_upload():
             # Show an error message if there was a problem loading the image
             messagebox.showerror('Error', 'Could not open the image file.')
 
-# Create the GUI window
+#Create a function to load model with selection
+def reloadModel():
+    global model
+    # get the new selected option
+    new_option = selected_option.get()
+    # do something with the new selected option
+    print("Selected option:", new_option)
+    if new_option == "ResNet 50 with dropout":
+        model = None
+        model = tf.keras.models.load_model('./models/my_trained_model5.h5')
+    elif new_option == "ResNet 50":
+        model = None
+        model = tf.keras.models.load_model('./models/my_trained_model3.h5')
+    elif new_option == "Basic CNN":
+        model = None
+        model = tf.keras.models.load_model('./models/my_trained_model.h5')
+    elif new_option == "ResNet 50 - imagenet":
+        model = None
+        model = tf.keras.models.load_model('./models/grape_disease_model.h5')
+    else:
+        model = None
+        model = tf.keras.models.load_model('./models/my_trained_model2.h5')
+    messagebox.showinfo("Changed model", "Selected model is {0}.".format(new_option))
+        
+
+# Create the Tkinter window
 window = tk.Tk()
-window.title('Image Classifier')
-window.geometry("900x650")
+window.title('Grape Disease Classifier')
+window_width = 900
+window_height = 650
+screen_width = window.winfo_screenwidth()
+screen_height = window.winfo_screenheight()
+x = (screen_width - window_width) // 2
+y = (screen_height - window_height) // 2
+window.geometry(f"{window_width}x{window_height}+{x}+{y}")
 
 # Create a canvas to display banner
 canvasBanner = tk.Canvas(window, width=900, height=180)
@@ -121,6 +157,8 @@ classify_button.place(x=760, y = 200 + 100)
 # create a label
 label = tk.Label(window, text="Select an model:")
 label.place(x=760, y = 300 + 100)
+confirm_button = tk.Button(window, text='Confirm', command=reloadModel, width=12)
+confirm_button.place(x=760, y = 350 + 150)
 
 # create a variable to hold the selected option
 selected_option = tk.StringVar(window)
@@ -136,26 +174,8 @@ option_menu = tk.OptionMenu(window, selected_option, *options)
 option_menu.config(width=23)
 option_menu.place(x=710, y = 350 + 100)
 def on_option_changed(*args):
-    global model
-    # get the new selected option
-    new_option = selected_option.get()
     # do something with the new selected option
-    print("Selected option:", new_option)
-    if new_option == "ResNet 50 with dropout":
-        model = None
-        model = tf.keras.models.load_model('./models/my_trained_model5.h5')
-    elif new_option == "ResNet 50":
-        model = None
-        model = tf.keras.models.load_model('./models/my_trained_model3.h5')
-    elif new_option == "Basic CNN":
-        model = None
-        model = tf.keras.models.load_model('./models/my_trained_model.h5')
-    elif new_option == "ResNet 50 - imagenet":
-        model = None
-        model = tf.keras.models.load_model('./models/grape_disease_model.h5')
-    else:
-        model = None
-        model = tf.keras.models.load_model('./models/my_trained_model2.h5')
+    print("New selected option:", selected_option.get())
 
 # attach a trace to the selected_option variable
 selected_option.trace("w", on_option_changed)

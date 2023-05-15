@@ -5,5 +5,5 @@
 ## Link to get pretrain models:
 https://drive.google.com/drive/folders/1zZkl3gRztJIlpphnFyPilgr1ZG8v_ZAG?usp=sharing
 
-## Data from: 
+## Data to train from: 
 https://www.kaggle.com/datasets/rm1000/grape-disease-dataset-original

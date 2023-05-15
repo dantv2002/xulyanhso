@@ -179,7 +179,7 @@ def open_train_window(window):
                         result = ResNet50_imagenet.startTraining(train_folder_path, test_folder_path, epoch, "./pretrain_models/grape_disease_model.h5")
                     result[0] = round(result[0], 2)
                     result[1] = round(result[1], 2)
-                    labelProgress.config(text=f"Status: Complete accuracy=" + result[1])
+                    labelProgress.config(text=f"Status: Complete accuracy= {result[1]}")
                     selection_window.update()
                     selection_window.deiconify()  # Display the root window
                     selection_window.focus_set()  # Set focus to the root window

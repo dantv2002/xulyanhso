@@ -75,26 +75,26 @@ class ResNet50_imagenet:
         accuracy = evaluation[1]
         return loss, accuracy
 
-    def train(self, epochs=10):
-        # model_name = "grape_disease_model.h5"
-        # checkpoint = ModelCheckpoint(savepath,
-        #                               monitor="val_loss",
-        #                               mode="min",
-        #                               save_best_only=True,
-        #                               verbose=1)
+    def train(self,filepath, epochs=10):
+        model_name = "grape_disease_model.h5"
+        checkpoint = ModelCheckpoint(filepath=filepath,
+                                      monitor="val_loss",
+                                      mode="min",
+                                      save_best_only=True,
+                                      verbose=1)
 
-        # earlystopping = EarlyStopping(monitor='val_loss', min_delta=0, patience=5, verbose=1, restore_best_weights=True)
+        earlystopping = EarlyStopping(monitor='val_loss', min_delta=0, patience=5, verbose=1, restore_best_weights=True)
 
-        # try:
-        #     self.history = self.model.fit(self.train_generator,
-        #                                   epochs=epochs,
-        #                                   validation_data=self.val_generator,
-        #                                   callbacks=[checkpoint, earlystopping])
-        # except KeyboardInterrupt:
-        #     print("\nTraining Stopped")
-        self.model.fit(self.train_generator,
-                            epochs=epochs,
-                            validation_data=self.val_generator)
+        try:
+            self.history = self.model.fit(self.train_generator,
+                                          epochs=epochs,
+                                          validation_data=self.val_generator,
+                                          callbacks=[checkpoint])
+        except KeyboardInterrupt:
+            print("\nTraining Stopped")
+        # self.model.fit(self.train_generator,
+        #                     epochs=epochs,
+        #                     validation_data=self.val_generator)
     
     def save_model(self, filepath):
         self.model.save(filepath)
@@ -103,8 +103,8 @@ def startTraining(train_dir, test_dir, epochs, filepath):
     resnet = ResNet50_imagenet(train_dir, test_dir)
     resnet.create_generators()
     resnet.build_model()
-    resnet.train(epochs)
-    resnet.save_model(filepath)
+    resnet.train(filepath,epochs)
+    # resnet.save_model(filepath)
     evaluate = resnet.evaluate_model()
     return evaluate
 

@@ -94,16 +94,16 @@ def reloadModel():
     new_option = selected_option.get()
     # do something with the new selected option
     print("Selected option:", new_option)
-    if new_option == "ResNet 50 with dropout":
+    if new_option == options[0]:
         model = None
         model = tf.keras.models.load_model('./pretrain_models/my_trained_model5.h5')
-    elif new_option == "ResNet 50":
+    elif new_option == options[1]:
         model = None
         model = tf.keras.models.load_model('./pretrain_models/my_trained_model3.h5')
-    elif new_option == "Basic CNN":
+    elif new_option == options[2]:
         model = None
         model = tf.keras.models.load_model('./pretrain_models/my_trained_model.h5')
-    elif new_option == "ResNet 50 - imagenet":
+    elif new_option == options[4]:
         model = None
         model = tf.keras.models.load_model('./pretrain_models/grape_disease_model.h5')
     else:

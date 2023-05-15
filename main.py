@@ -109,6 +109,7 @@ def reloadModel():
     else:
         model = None
         model = tf.keras.models.load_model('./pretrain_models/my_trained_model2.h5')
+    label.config(text="Current model: \n {0}".format(new_option))
     messagebox.showinfo("Changed model", "Selected model is {0}.".format(new_option))
         
 def open_train_window(window):
@@ -147,14 +148,15 @@ def open_train_window(window):
             textTestInfo = canvasTestInfo.create_text(10, 10, anchor=tk.NW, text = "Test folder: No folder selected", font=("Arial", 14))
 
     def train():
+        # alertLabel = tk.Label(selection_window, text="Press any key to stop training")
+        # alertLabel.place(x=270, y=450)
         try:
             nonlocal training_in_progress
             if not training_in_progress:
                 nonlocal train_folder_path, test_folder_path
                 if train_folder_path and test_folder_path:
                     window.grab_set()  # Lock all windows
-                    labelProgress = tk.Label(selection_window, wraplength=180, text="Training in progress...", font=("Arial", 14))
-                    labelProgress.place(x=270, y=400)
+                    labelProgress.config(text="Status: Training in progress...")
                     selection_window.update()  # Update the selection_window to show the label
                     result = None
                     option = selected_optionTrain.get()
@@ -177,8 +179,7 @@ def open_train_window(window):
                         result = ResNet50_imagenet.startTraining(train_folder_path, test_folder_path, epoch, "./pretrain_models/grape_disease_model.h5")
                     result[0] = round(result[0], 2)
                     result[1] = round(result[1], 2)
-                    labelProgress.config(text=f"Training Complete: {result}")
-                    labelProgress.place(x=250, y=430)
+                    labelProgress.config(text=f"Status: Complete accuracy=" + result[1])
                     selection_window.update()
                     selection_window.deiconify()  # Display the root window
                     selection_window.focus_set()  # Set focus to the root window
@@ -202,7 +203,8 @@ def open_train_window(window):
     
     select_test_folder_button = tk.Button(selection_window, text="Select test folder", command=select_test_folder)
     select_test_folder_button.place(x=300, y = 250)
-    
+    labelProgress = tk.Label(selection_window, wraplength=180, text="Status: None", font=("Arial", 14))
+    labelProgress.place(x=270, y=400)
     # create a label
     label = tk.Label(selection_window, text="Select an model:")
     label.place(x=50, y = 350)
@@ -266,17 +268,11 @@ upload_button.place(x=760, y = 100 + 100)
 classify_button = tk.Button(window, text='Classify', command=classify_image, width=12)
 classify_button.place(x=760, y = 200 + 100)
 
-# create a label
-label = tk.Label(window, text="Select an model:")
-label.place(x=760, y = 300 + 100)
 confirm_button = tk.Button(window, text='Confirm', command=reloadModel, width=12)
 confirm_button.place(x=760, y = 350 + 150)
 
 # create a variable to hold the selected option
 selected_option = tk.StringVar(window)
-
-# set the default value of the variable
-selected_option.set("ResNet 50 with dropout")
 
 # create a selection box (option menu)
 options = []
@@ -285,6 +281,11 @@ options = modelNames.copy()
 option_menu = tk.OptionMenu(window, selected_option, *options)
 option_menu.config(width=23)
 option_menu.place(x=710, y = 350 + 100)
+# set the default value of the variable
+selected_option.set(options[0])
+# create a label
+label = tk.Label(window, anchor=tk.W,text= "Current model: \n {0}".format(options[0]))
+label.place(x=745, y = 300 + 100)
 def on_option_changed(*args):
     # do something with the new selected option
     print("New selected option:", selected_option.get())

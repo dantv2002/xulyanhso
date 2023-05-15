@@ -73,7 +73,7 @@ class ResNet50_imagenet:
         evaluation = self.model.evaluate(self.test_generator)
         loss = evaluation[0]
         accuracy = evaluation[1]
-        return loss, accuracy
+        return [loss, accuracy]
 
     def train(self,filepath, epochs=10):
         model_name = "grape_disease_model.h5"
@@ -84,14 +84,17 @@ class ResNet50_imagenet:
                                       verbose=1)
 
         earlystopping = EarlyStopping(monitor='val_loss', min_delta=0, patience=5, verbose=1, restore_best_weights=True)
-
-        try:
-            self.history = self.model.fit(self.train_generator,
+        self.history = self.model.fit(self.train_generator,
                                           epochs=epochs,
                                           validation_data=self.val_generator,
                                           callbacks=[checkpoint])
-        except KeyboardInterrupt:
-            print("\nTraining Stopped")
+        # try:
+        #     self.history = self.model.fit(self.train_generator,
+        #                                   epochs=epochs,
+        #                                   validation_data=self.val_generator,
+        #                                   callbacks=[checkpoint])
+        # except KeyboardInterrupt:
+        #     print("\nTraining Stopped")
         # self.model.fit(self.train_generator,
         #                     epochs=epochs,
         #                     validation_data=self.val_generator)
